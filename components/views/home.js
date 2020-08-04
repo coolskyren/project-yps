@@ -1,75 +1,52 @@
 import React from 'react'
 import '../../assets/css/home.css'
+import axios from 'axios'
+import 'swiper/swiper-bundle.min.css'
+import '../../assets/css/recommend.css'
+import 'swiper/swiper-bundle.min.js'
+import Swiper from 'swiper'
+import { personalized, banner, getNewSongs } from '../util/axios'
 class Home extends React.Component {
     constructor() {
         super()
         this.state = {
-            homeList: [
-                {
-                    id: 1,
-                    homeName: '2020上半年最受欢迎日语新歌',
-                    img: require('../../assets/img/1.jpg')
-                },
-                {
-                    id: 2,
-                    homeName: '2020上半年最受欢迎日语新歌',
-                    img: require('../../assets/img/2.jpg')
-                },
-                {
-                    id: 3,
-                    homeName: '2020上半年最受欢迎日语新歌',
-                    img: require('../../assets/img/3.jpg')
-                },
-                {
-                    id: 4,
-                    homeName: '2020上半年最受欢迎日语新歌',
-                    img: require('../../assets/img/4.jpg')
-                },
-                {
-                    id: 5,
-                    homeName: '2020上半年最受欢迎日语新歌',
-                    img: require('../../assets/img/5.jpg')
-                },
-                {
-                    id: 6,
-                    homeName: '2020上半年最受欢迎日语新歌',
-                    img: require('../../assets/img/6.jpg')
-                },
-
-            ],
-            songList: [
-                {
-                    id: 1,
-                    name: '致我们将要逝去的青春',
-                    songname: '张靓颖'
-                },
-                {
-                    id: 2,
-                    name: '如果我是海',
-                    songname: '李荣浩'
-                },
-                {
-                    id: 3,
-                    name: '祝我快乐',
-                    songname: '汪苏泷'
-                },
-                {
-                    id: 4,
-                    name: '星星之火',
-                    songname: '罗云熙'
-                },
-                {
-                    id: 5,
-                    name: '晚来天御雪',
-                    songname: '恋恋故人难'
-                },
-                {
-                    id: 6,
-                    name: '睹物思人',
-                    songname: '武艺'
-                },
-            ]
+            homeList: [],
+            songList: [],
+            bannerList:[]
         }
+    }
+    componentDidMount(){
+        axios.all([personalized({ limit: 6 }), banner(), getNewSongs()])
+        .then(axios.spread((homeList,bannerList,songList) => {
+            if(bannerList.code == 200){
+                let banners = bannerList.banners.filter((item,i) => i<4)
+                this.setState({
+                    bannerList:banners
+                },() => {
+                    let swiper = new Swiper('.swiper-container', {
+                        autoplay: {
+                            delay: 2000,
+                        },
+                        loop: true,
+                        pagination: {
+                            el: '.swiper-pagination',
+                        },
+                    });
+                }
+                )
+            }
+            if(homeList.code == 200){
+                this.setState({
+                    homeList: homeList.result
+                })
+            }
+            if (songList.code === 200) {
+                console.log(songList.result)
+                this.setState({
+                    songList: songList.result
+                })
+            }
+        }))
     }
     goList(id) {
         this.props.history.push(`/list?id=${id}`)
@@ -78,16 +55,28 @@ class Home extends React.Component {
         this.props.history.push(`/play?id=${id}`)
     }
     render() {
-        const { homeList,songList } = this.state
+        const { homeList,songList,bannerList } = this.state
         return (
             <div className='home'>
+                <div className="swiper-container">
+                    <div className="swiper-wrapper">
+                        {
+                            bannerList.map(item => {
+                                return <div key={item.imageUrl} className="swiper-slide">
+                                    <img className='imgUrl' src={item.imageUrl} alt="" />
+                                </div>
+                            })
+                        }
+                    </div>
+                    <div className="swiper-pagination"></div>
+                </div>
                 <h1>推荐歌单</h1>
                 <ul>
                     {
                         homeList.map(item => {
                             return <li key={item.id} className='homeList' onClick={this.goList.bind(this, item.id)}>
-                                <img src={item.img} alt="" />
-                                <span>{item.homeName}</span>
+                                <img src={item.picUrl} alt="" />
+                                <span>{item.name}</span>
                             </li>
                         })
                     }
@@ -98,8 +87,19 @@ class Home extends React.Component {
                         songList.map(item => {
                             return <li key={item.id} className='songlist' onClick={this.goPlay.bind(this, item.id)}>
                                 <p>
-                                    <b>{item.name}</b>
-                                    <i>--{item.songname}</i>
+                        <b>{item.song.name}{
+                            item.song.alias? item.song.alias.map(item => {
+                                return <i style={
+                                    {
+                                        color:'#888'
+                                    }
+                                }key = {item}>({item})</i>
+                            }):''
+                        }</b>
+                                    {item.song.artists ? item.song.artists.map(item => {
+                                       return <i key={item.id}>{item.name}</i> 
+                                    }):''
+                                }
                                 </p>
                                 <span></span>
                             </li>

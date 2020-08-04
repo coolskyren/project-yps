@@ -1,63 +1,19 @@
 import React from 'react'
 import qs from 'querystring'
 import '../../assets/css/play.css'
+import { checkInfo } from '../util/axios'
 class Play extends React.Component {
     constructor(){
         super()
         this.state = {
-            songList:[
-                {
-                    id:1,
-                    img:require('../../assets/img/1.jpg'),
-                    url:require('../../assets/music/1.m4a'),
-                    play:require('../../assets/img/bofang.jpg'),
-                    flag:true,
-                    name:'致我们将要逝去的青春'
-                },
-                {
-                    id:2,
-                    img:require('../../assets/img/2.jpg'),
-                    url:require('../../assets/music/1.m4a'),
-                    play:require('../../assets/img/bofang.jpg'),
-                    flag:true,
-                    name:'如果我是海'
-                },
-                {
-                    id:3,
-                    img:require('../../assets/img/3.jpg'),
-                    url:require('../../assets/music/1.m4a'),
-                    play:require('../../assets/img/bofang.jpg'),
-                    flag:true,
-                    name:'祝我快乐'
-                },
-                {
-                    id:4,
-                    img:require('../../assets/img/4.jpg'),
-                    url:require('../../assets/music/1.m4a'),
-                    play:require('../../assets/img/bofang.jpg'),
-                    flag:true,
-                    name:'星星之火'
-                },
-                {
-                    id:5,
-                    img:require('../../assets/img/5.jpg'),
-                    url:require('../../assets/music/1.m4a'),
-                    play:require('../../assets/img/bofang.jpg'),
-                    flag:true,
-                    name:'晚来天御雪'
-                },
-                {
-                    id:6,
-                    img:require('../../assets/img/6.jpg'),
-                    url:require('../../assets/music/1.m4a'),
-                    play:require('../../assets/img/bofang.jpg'),
-                    flag:true,
-                    name:'睹物思人'
-                },
-            ]
+            songList:[]
         }
         this.audio = React.createRef()
     }
+    componentDidMount(){
+
+    }
+    
     goPlay(){
         this.audio.current.play()
         this.setState({

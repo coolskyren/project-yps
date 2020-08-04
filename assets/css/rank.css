@@ -32,15 +32,17 @@
   color: hsla(0, 0%, 100%, 0.8);
   font-size: 12px;
 }
+.home ul {
+  padding-left: 0.2rem;
+  box-sizing: border-box;
+}
 .home ul .songlist {
   padding: 6px 0;
   display: flex;
-  justify-content: flex-start;
 }
 .home ul .songlist i {
   font-size: 18px;
   margin-top: 0.2rem;
-  margin-left: 0.2rem;
 }
 .home ul .songlist p {
   display: flex;

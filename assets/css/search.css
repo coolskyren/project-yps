@@ -1,5 +1,4 @@
 .search {
-  height: 1.2rem;
   line-height: 1.2rem;
   background-color: #fbfbfb;
 }
@@ -25,4 +24,17 @@
   background-color: #ebecec;
   width: 5.9rem;
   height: 0.6rem;
+}
+.search .S-list li {
+  float: left;
+  display: inline-block;
+  height: 32px;
+  margin-right: 8px;
+  margin-bottom: 8px;
+  padding: 0 14px;
+  font-size: 14px;
+  line-height: 32px;
+  color: #333;
+  border-radius: 32px;
+  border: 1px solid #888888;
 }
